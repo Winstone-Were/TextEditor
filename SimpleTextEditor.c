@@ -19,9 +19,9 @@
 
 /*** defines ***/
 
-#define KILO_VERSION "0.0.1"
-#define KILO_TAB_STOP 8
-#define KILO_QUIT_TIMES 3
+#define TEXT_EDITOR_VERSION "0.0.1"
+#define TEXT_EDITOR_TAB_STOP 8
+#define TEXT_EDITOR_QUIT_TIMES 3
 
 #define CTRL_KEY(k) ((k) & 0x1f)
 
@@ -190,7 +190,7 @@ int editorRowCxToRx(erow *row, int cx) {
   int j;
   for (j = 0; j < cx; j++) {
     if (row->chars[j] == '\t')
-      rx += (KILO_TAB_STOP - 1) - (rx % KILO_TAB_STOP);
+      rx += (TEXT_EDITOR_TAB_STOP - 1) - (rx % TEXT_EDITOR_TAB_STOP);
     rx++;
   }
   return rx;
@@ -203,13 +203,13 @@ void editorUpdateRow(erow *row) {
     if (row->chars[j] == '\t') tabs++;
 
   free(row->render);
-  row->render = malloc(row->size + tabs*(KILO_TAB_STOP - 1) + 1);
+  row->render = malloc(row->size + tabs*(TEXT_EDITOR_TAB_STOP - 1) + 1);
 
   int idx = 0;
   for (j = 0; j < row->size; j++) {
     if (row->chars[j] == '\t') {
       row->render[idx++] = ' ';
-      while (idx % KILO_TAB_STOP != 0) row->render[idx++] = ' ';
+      while (idx % TEXT_EDITOR_TAB_STOP != 0) row->render[idx++] = ' ';
     } else {
       row->render[idx++] = row->chars[j];
     }
@@ -442,7 +442,7 @@ void editorDrawRows(struct abuf *ab) {
       if (E.numrows == 0 && y == E.screenrows / 3) {
         char welcome[80];
         int welcomelen = snprintf(welcome, sizeof(welcome),
-          "Kilo editor -- version %s", KILO_VERSION);
+          "TEXT_EDITOR editor -- version %s", TEXT_EDITOR_VERSION);
         if (welcomelen > E.screencols) welcomelen = E.screencols;
         int padding = (E.screencols - welcomelen) / 2;
         if (padding) {
@@ -604,7 +604,7 @@ void editorMoveCursor(int key) {
 }
 
 void editorProcessKeypress() {
-  static int quit_times = KILO_QUIT_TIMES;
+  static int quit_times = TEXT_EDITOR_QUIT_TIMES;
 
   int c = editorReadKey();
 
@@ -677,7 +677,7 @@ void editorProcessKeypress() {
       break;
   }
 
-  quit_times = KILO_QUIT_TIMES;
+  quit_times = TEXT_EDITOR_QUIT_TIMES;
 }
 
 /*** init ***/
